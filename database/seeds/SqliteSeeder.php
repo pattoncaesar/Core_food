@@ -11,7 +11,7 @@ class SqliteSeeder extends Seeder
      */
     public function run()
     {
-        $path = base_path() . '/database/seeds/data.sqlite';    //  convert sql to sqlite: https://ww9.github.io/mysql2sqlite/
+        $path = base_path() . '/database/seeds/data_sqlite';    //  convert sql to sqlite: https://ww9.github.io/mysql2sqlite/
         $sql = file_get_contents($path);
         DB::unprepared($sql);
     }
