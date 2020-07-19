@@ -6,7 +6,7 @@ class SqlSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
+     * php artisan db:seed --class=SqlSeeder
      * @return void
      */
     public function run()

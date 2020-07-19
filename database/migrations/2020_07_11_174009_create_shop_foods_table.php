@@ -19,7 +19,15 @@ class CreateShopfoodsTable extends Migration
             $table->integer('shop_table_id');
             $table->integer('food_id')->default('0');
             $table->integer('order')->default('0');
-            $table->timestamps();
+
+            // 設定外來鍵
+//            $table->foreign('shop_table_id')
+//                ->references('id')
+//                ->on('shop_mains');
+//
+//            $table->foreign('food_id')
+//                ->references('id')
+//                ->on('food_subs');
         });
     }
 

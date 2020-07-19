@@ -19,7 +19,6 @@ class CreateAreamainsTable extends Migration
             $table->increments('id');
             $table->string('area_name', 255)->default('');
             $table->integer('order')->default('0');
-            $table->timestamps();
         });
     }
 

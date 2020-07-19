@@ -19,7 +19,6 @@ class CreateFoodmainsTable extends Migration
             $table->increments('id');
             $table->string('food_name', 255)->default('');
             $table->integer('order')->default('0');
-            $table->timestamps();
         });
     }
 

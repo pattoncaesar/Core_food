@@ -31,6 +31,21 @@ class CreateShopmainsTable extends Migration
             $table->text('open_time');
             $table->text('shop_info');
             $table->timestamps();
+
+            // 設定外來鍵
+//            $table->foreign('main_area')
+//                ->references('id')
+//                ->on('area_mains');
+//                //->onDelete('cascade');
+//
+//            $table->foreign('sub_area')
+//                ->references('id')
+//                ->on('area_subs');
+//
+//            // 設定外來鍵
+//            $table->foreign('main_food')
+//                ->references('id')
+//                ->on('food_mains');
         });
     }
 

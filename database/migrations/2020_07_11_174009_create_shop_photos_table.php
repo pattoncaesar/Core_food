@@ -19,7 +19,11 @@ class CreateShopphotosTable extends Migration
             $table->integer('shop_table_id');
             $table->integer('photo_num')->default('0');
             $table->integer('order')->default('0');
-            $table->timestamps();
+
+            // 設定外來鍵
+//            $table->foreign('shop_table_id')
+//                ->references('id')
+//                ->on('area_mains');
         });
     }
 

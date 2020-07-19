@@ -20,7 +20,11 @@ class CreateAreasubsTable extends Migration
             $table->integer('master_id')->default('0');
             $table->string('area_name', 255)->default('');
             $table->integer('order')->default('0');
-            $table->timestamps();
+
+            // 設定外來鍵
+//            $table->foreign('master_id')
+//                ->references('id')
+//                ->on('area_mains');
         });
     }
 

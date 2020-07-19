@@ -8,7 +8,7 @@ class ShoplistController extends Controller
 {
     public function index()
     {
-        $t = \App\Areamain::all();
+        $t = \App\AreaMain::all();
         dd($t);
     }
 }
