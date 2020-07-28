@@ -49,9 +49,9 @@
     <div class="introduction">
         {{$shop->shop_text}}
     </div>
-{{--
     <div class="shopContents">
         <h3><span class="photo">PHOTO GALLERY</span></h3>
+        @if (count($photos) > 1)
         <div class="flexslider photoSlider">
             <ul class="slides">
                 @foreach($photos as $photo)
@@ -62,8 +62,16 @@
             <a href="#" class="flex-prev button-prev">Prev</a>
             <a href="#" class="flex-next button-next">Next</a>
         </div>
+        @else
+        <div class="photoSlider">
+            <ul class="">
+                @foreach($photos as $photo)
+                    <li><img src="{{ URL::asset('/img/shop/'.$photo) }}" alt=""></li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
     </div>
---}}
     <div class="shopContents">
         <h3><span class="access">ACCESS</span></h3>
         <div class="accessmap">
@@ -81,7 +89,7 @@
                 </tr>
                 <tr>
                     <th>商家分類</th>
-                    <td>{{$shop->food_name_main}}</td>
+                    <td>{{$foodmain_name}}</td>
                 </tr>
                 <tr>
                     <th>標籤</th>

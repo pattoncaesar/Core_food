@@ -18,21 +18,24 @@ class ShoptopController extends Controller
     {
         //  TODO: check $id
         $shop = App\ShopMain::find($id); //抓一個
-//        $photo = App\ShopPhoto::find();
-//        dd($shop);
+        $photos = $shop->photos;
+//        dd($shop->foodTags);
+
+        foreach ($photos as $photo) {
+            $photos_data[] = (($photo->photo_num) % 32) == 0 ? '1.png' : (($photo->photo_num) % 32) . '.png';
+        }
+
         //  random photo
-//        for($i=0;$i<3;$i++) {
+//        for ($i = 0; $i < 3; $i++) {
 //            # code...
-//            $photos[] = (($shop['photo_num']+$i)%32)==0?'1.png':(($shop['photo_num']+$i)%32).'.png';
+//            $photos[] = (($photo->photo_num + $i) % 32) == 0 ? '1.png' : (($photo->photo_num + $i) % 32) . '.png';
 //        }
-//$shoptop['photos']=$photos;
-//    //print_r($shoptop);
-//
-//
+
         return view('shoptop',
             [
                 'shop' => $shop,
-//        'photos' => $photos
+                'photos' => $photos_data,
+                'foodmain_name' => $shop->foodmain->food_name
             ]
         );
 

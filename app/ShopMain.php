@@ -9,7 +9,11 @@ class ShopMain extends Model
     protected $table = 'shop_mains';
 
     public function foodmain() {
-        return $this->belongsTo('App\FoodMain', 'main_food');
+        return $this->hasOne('App\FoodMain', 'id', 'main_food');
+    }
+
+    public function foodTags() {
+//        return $this->hasManyThrough('App\FoodSub', 'App\ShopFood','shop_table_id','id'); // 'id', 'main_food'
     }
 
     public function areamain() {
@@ -18,5 +22,10 @@ class ShopMain extends Model
 
     public function areasub() {
         return $this->belongsTo('App\AreaSub', 'sub_area');
+    }
+
+    //  Shop -> Photo
+    public function photos() {
+        return $this->hasMany('App\ShopPhoto', 'shop_table_id');
     }
 }
