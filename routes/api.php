@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//  /api/shops/
+Route::get('shops', 'ApiController@getAllShops');
+//  /api/shops/1/
+Route::get('shops/{areaId}', 'ApiController@getAllShops');
+
