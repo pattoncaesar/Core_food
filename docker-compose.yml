@@ -1,0 +1,39 @@
+version: "3"
+
+networks:
+  backend:
+  frontend:
+
+services:
+
+  # web-server
+  web-server:
+    container_name: nginx
+    networks:
+      - frontend
+      - backend
+    image: nginx:1.17
+    ports:
+      - "${HTTPS_PORT}:443"
+      - "${HTTP_PORT}:80"
+    volumes:
+      - ./docker/log/nginx:/var/log/nginx
+      - ./docker/nginx/conf:/etc/nginx/conf.d
+      - ./docker/ssl:/etc/ssl
+      - ./:/var/www/html/core_food
+
+  # php-fpm
+  php-fpm:
+    container_name: php
+    networks:
+      - backend
+    image: php:7.3-fpm
+    expose:
+      - 9000
+    tty: true
+    volumes:
+      - ./docker/php/conf.d/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./docker/php/php-fpm.d:/usr/local/etc/php-fpm.d
+      - ./docker/ssl:/etc/ssl
+      - ./:/var/www/html/core_food
