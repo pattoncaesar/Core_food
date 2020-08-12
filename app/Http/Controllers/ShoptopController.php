@@ -19,8 +19,8 @@ class ShoptopController extends Controller
         $photos_data = [];
         $foodTagsName = [];
 
-        //  TODO: check $id
-        $shop = App\ShopMain::find($id); //抓一個
+        $shop = App\ShopMain::find($id);
+        if(is_null($shop))  abort(404);
         $photos = $shop->photos;
         foreach ($shop->foodTags as $foodsub) {
             $foodTagsName[] = $foodsub->foodsub->food_name;
