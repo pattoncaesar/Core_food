@@ -13,7 +13,8 @@ class ShopMain extends Model
     }
 
     public function foodTags() {
-//        return $this->hasManyThrough('App\FoodSub', 'App\ShopFood','shop_table_id','id'); // 'id', 'main_food'
+        return $this->hasMany('App\ShopFood', 'shop_table_id');
+//        return $this->hasManyThrough('App\FoodSub', 'App\ShopFood','shop_table_id','id'); // App\ShopFood 用了非 id
     }
 
     public function areamain() {

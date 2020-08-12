@@ -93,7 +93,7 @@
                 </tr>
                 <tr>
                     <th>標籤</th>
-                    <td>{{$shop->food_name_sub}}</td>
+                    <td>{{$food_name_sub}}</td>
                 </tr>
                 <tr>
                     <th>電話</th>

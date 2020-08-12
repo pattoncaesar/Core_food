@@ -16,10 +16,15 @@ class ShoptopController extends Controller
 {
     public function index($id)
     {
+        $photos_data = [];
+        $foodTagsName = [];
+
         //  TODO: check $id
         $shop = App\ShopMain::find($id); //抓一個
         $photos = $shop->photos;
-//        dd($shop->foodTags);
+        foreach ($shop->foodTags as $foodsub) {
+            $foodTagsName[] = $foodsub->foodsub->food_name;
+        }
 
         foreach ($photos as $photo) {
             $photos_data[] = (($photo->photo_num) % 32) == 0 ? '1.png' : (($photo->photo_num) % 32) . '.png';
@@ -35,7 +40,8 @@ class ShoptopController extends Controller
             [
                 'shop' => $shop,
                 'photos' => $photos_data,
-                'foodmain_name' => $shop->foodmain->food_name
+                'foodmain_name' => $shop->foodmain->food_name,
+                'food_name_sub' => implode(" / ", $foodTagsName),
             ]
         );
 
