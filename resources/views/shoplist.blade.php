@@ -11,20 +11,11 @@
     <script src="{{ URL::asset('/js/jquery-migrate-3.0.min.js') }}"></script>
     <script src="{{ URL::asset('/js/js.cookie.js') }}"></script>
 
-
-    <?php if (isset($area_main_name)&&$area_main_name!=null): ?>
-    <title>美食查詢-{area_main_name}-</title>
-    <?php else: ?>
-    <title>美食查詢</title>
-    <?php endif ?>
+    <title>美食查詢-{{$area->area_name}}-</title>
 </head>
 <body>
 <header>
-    <?php if (isset($area_main_name)&&$area_main_name!=null): ?>
-    <h1><span>{query} 美食查詢</span></h1>
-    <?php else: ?>
-    <h1><span>美食查詢</span></h1>
-    <?php endif ?>
+    <h1><span>{{$area->area_name}} 美食查詢</span></h1>
 
     <div class="headerLogo">
         <a href="search"><img src="{{ URL::asset('/img/logo.png') }}" alt="LOGO"></a>
@@ -34,14 +25,11 @@
     <ul>
         <li><a href="search">首頁</a></li>
         <li>></li>
-        <?php if (isset($main_area)&&$main_area!=null): ?>
-        <li><a href="search/{main_area}">{area_main_name}</a></li>
+        <li><a href="/shoplist/{{$area->id}}">{{$area->area_name}}</a></li>
         <li>></li>
         <?php if (isset($sub_area)&&$sub_area!=null): ?>
-        <li><a href="search/{main_area}/{sub_area}">{area_main_name}・{area_subs_name}</a></li>
+        <li><a href="/shoplist/{main_area}/{sub_area}">{area_main_name}・{area_subs_name}</a></li>
         <li>></li>
-        <?php endif ?>
-
         <?php endif ?>
         <li><span>查詢結果</span></li>
     </ul>
@@ -55,21 +43,15 @@
         <?php endif ?>
 
         <div class="m-pager">
-            <ul>
-                <li><span>1</span></li>
-                <li><a href="">2</a></li>
-                <li><a href="">3</a></li>
-                <li><a href="">4</a></li>
-                <li><a href="">5</a></li>
-                <li><a href="">＞</a></li>
-            </ul>
+{{--            {!! $shop->links('pagination.default') !!}--}}
+            {!! $shop->links() !!}
         </div>
         <div class="m-shopList">
             <ul>
-                {shops}
+                @foreach ($shop as $shop_item)
                 <li class="shopData">
                     <div class="shopHead">
-                        <a href="shoptop/{id}">{shop_name}</a>
+                        <a href="/shop/{{$shop_item->id}}">{{$shop_item->shop_name}}</a>
                     </div>
                     <div class="shopDetail">
                         <div class="photo">
@@ -77,48 +59,43 @@
                         </div>
                         <div class="info">
                             <div class="shopTitle">
-                                <p>{main_title}</p>
+                                <p>{{$shop_item->main_title}}</p>
                             </div>
                             <table>
                                 <tr>
                                     <th>分類</th>
-                                    <td>{food_name_main}</td>
+                                    <td>{{$shop_item->foodmain->food_name}}</td>
                                 </tr>
                                 <tr>
                                     <th>標籤</th>
                                     <td>
                                         <ul class="foodTags">
-                                            <li>{food_name_sub}</li>
+                                            @foreach ($shop_item->foodTags as $food_tag)
+                                            <li>{{$food_tag->foodsub->food_name}}</li>
+                                            @endforeach
                                         </ul>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>營業時間</th>
-                                    <td>{open_time}</td>
+                                    <td>{{$shop_item->open_time}}</td>
                                 </tr>
                                 <tr>
                                     <th>地址</th>
-                                    <td>{address}</td>
+                                    <td>{{$shop_item->address}}</td>
                                 </tr>
                             </table>
                             <div class="linkBtn">
-                                <button class="like u-hoverOpacity" value="{id}">LIKE</button>
+                                <button class="like u-hoverOpacity" value="{{$shop_item->id}}">LIKE</button>
                             </div>
                         </div>
                     </div>
                 </li>
-                {/shops}
+                @endforeach
             </ul>
         </div>
         <div class="m-pager">
-            <ul>
-                <li><span>1</span></li>
-                <li><a href="">2</a></li>
-                <li><a href="">3</a></li>
-                <li><a href="">4</a></li>
-                <li><a href="">5</a></li>
-                <li><a href="">＞</a></li>
-            </ul>
+            {!! $shop->links() !!}
         </div>
     </div>
     <div class="rightWrap">
@@ -127,47 +104,45 @@
             <div class="searchArea">
                 <p class="typeTitle">地點</p>
                 <ul class="main">
+                    @foreach ($area_list as $area_item)
                     <li class="m-list is-active">
-                        <p class="mainList"><span>台北市</span></p>
+                        <p class="mainList"><span>{{$area_item->area_name}}</span></p>
                         <ul class="sub">
                             <li>
-                                <input type="checkbox" id="s-area0">
-                                <label for="s-area0">全台北市</label>
+                                <input type="checkbox" id="s-area0" checked>
+                                <label for="s-area0">全{{$area_item->area_name}}</label>
                             </li>
+                            @foreach ($area_item->subarealist->sortBy('order') as $area_sub)
                             <li>
-                                <input type="checkbox" id="s-area1" checked>
-                                <label for="s-area1">信義區</label>
+                                <input type="checkbox" id="s-area{{$area_sub->id}}">
+                                <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
                             </li>
-                            <li>
-                                <input type="checkbox" id="s-area2">
-                                <label for="s-area2">士林區</label>
-                            </li>
+                            @endforeach
                         </ul>
                     </li>
-                    <li class="m-list">
-                        <p class="mainList"><span>新北市</span></p>
-                    </li>
+                    @endforeach
                 </ul>
             </div>
             <div class="searchFood">
                 <p class="typeTitle">分類</p>
                 <ul class="main">
-                    <li class="m-list">
-                        <p class="mainList"><span>中式料理</span></p>
-                    </li>
+                    @foreach ($food_list as $food_item)
                     <li class="m-list is-active">
-                        <p class="mainList"><span>日式料理</span></p>
+                        <p class="mainList"><span>{{$food_item->food_name}}</span></p>
                         <ul class="sub">
                             <li>
-                                <input type="checkbox" id="s-genre0">
-                                <label for="s-genre0">全日式料理</label>
+                                <input type="checkbox" id="s-genre0" checked>
+                                <label for="s-genre0">全{{$food_item->food_name}}</label>
                             </li>
+                            @foreach ($food_item->subfoodlist->sortBy('order') as $food_sub)
                             <li>
-                                <input type="checkbox" id="s-genre1" checked>
-                                <label for="s-genre1">居酒屋</label>
+                                <input type="checkbox" id="s-genre{{$food_sub->id}}">
+                                <label for="s-genre{{$food_sub->id}}">{{$food_sub->food_name}}</label>
                             </li>
+                            @endforeach
                         </ul>
                     </li>
+                    @endforeach
                 </ul>
             </div>
             <div class="btnArea">
