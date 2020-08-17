@@ -14,7 +14,7 @@ dev:
         - pager 
     - ShopRanking
         - order
-    - Refactor
+    - Refactor + SA
     - Restful API
     - OAuth
     - ShopComment
