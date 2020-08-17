@@ -15,7 +15,10 @@ dev:
     - ShopRanking
         - order
     - Refactor
+    - Restful API
+    - OAuth
     - ShopComment
+    - Android
     - MySQL -> LNMP
     - Vue
     
