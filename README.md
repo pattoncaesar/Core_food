@@ -10,6 +10,7 @@ dev:
    - ShopList
         - ~~local_area~~
         - ~~摺疊*2~~
+        - 右方摺疊狀況與實際檢索同步
         - search
         - pager 
    - ShopRanking
