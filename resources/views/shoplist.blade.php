@@ -102,47 +102,51 @@
                 <ul class="main metismenu" id="areaMenu">
                     @foreach ($area_list as $area_item)
                         @if ($loop->first)
-                        <li class="m-list is-active">
-                            @else
+                            <li class="m-list is-active">
+                        @else
                             <li class="m-list ">
-                            @endif
-                            <p class="mainList"><span>{{$area_item->area_name}}</span></p>
-                            <ul class="sub">
-                                <li>
-                                    <input type="checkbox" id="s-area0" checked>
-                                    <label for="s-area0">全{{$area_item->area_name}}</label>
-                                </li>
-                                @foreach ($area_item->subarealist->sortBy('order') as $area_sub)
+                                @endif
+                                <p class="mainList"><span>{{$area_item->area_name}}</span></p>
+                                <ul class="sub">
                                     <li>
-                                        <input type="checkbox" id="s-area{{$area_sub->id}}">
-                                        <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
+                                        <input type="checkbox" id="s-area0" checked>
+                                        <label for="s-area0">全{{$area_item->area_name}}</label>
                                     </li>
-                                @endforeach
-                            </ul>
-                        </li>
-                    @endforeach
+                                    @foreach ($area_item->subarealist->sortBy('order') as $area_sub)
+                                        <li>
+                                            <input type="checkbox" id="s-area{{$area_sub->id}}">
+                                            <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                            @endforeach
                 </ul>
             </div>
             <div class="searchFood">
                 <p class="typeTitle">分類</p>
                 <ul class="main">
                     @foreach ($food_list as $food_item)
-                        <li class="m-list is-active">
-                            <p class="mainList"><span>{{$food_item->food_name}}</span></p>
-                            <ul class="sub">
-                                <li>
-                                    <input type="checkbox" id="s-genre0" checked>
-                                    <label for="s-genre0">全{{$food_item->food_name}}</label>
-                                </li>
-                                @foreach ($food_item->subfoodlist->sortBy('order') as $food_sub)
+                        @if ($loop->first)
+                            <li class="m-list is-active">
+                        @else
+                            <li class="m-list ">
+                                @endif
+                                <p class="mainList"><span>{{$food_item->food_name}}</span></p>
+                                <ul class="sub">
                                     <li>
-                                        <input type="checkbox" id="s-genre{{$food_sub->id}}">
-                                        <label for="s-genre{{$food_sub->id}}">{{$food_sub->food_name}}</label>
+                                        <input type="checkbox" id="s-genre0" checked>
+                                        <label for="s-genre0">全{{$food_item->food_name}}</label>
                                     </li>
-                                @endforeach
-                            </ul>
-                        </li>
-                    @endforeach
+                                    @foreach ($food_item->subfoodlist->sortBy('order') as $food_sub)
+                                        <li>
+                                            <input type="checkbox" id="s-genre{{$food_sub->id}}">
+                                            <label for="s-genre{{$food_sub->id}}">{{$food_sub->food_name}}</label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                            @endforeach
                 </ul>
             </div>
             <div class="btnArea">
@@ -167,6 +171,11 @@
 <script src="{{ URL::asset('/js/js.cookie.js') }}"></script>
 <script>
     $(window).on('load', function () {
+        $('.m-list').click(function () {
+            $('.is-active').removeClass('is-active');
+            $(this).addClass('is-active');
+        });
+
         $("button.like").each(function () {
             id = $(this).attr("value");
             if (typeof Cookies.get('shop_' + id + '_liked') === 'undefined' || Cookies.get('shop_' + id + '_liked') === 0) {

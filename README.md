@@ -9,7 +9,7 @@ dev:
 #   TODO
    - ShopList
         - ~~local_area~~
-        - 摺疊*2
+        - ~~摺疊*2~~
         - search
         - pager 
    - ShopRanking
