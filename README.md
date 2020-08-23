@@ -19,6 +19,7 @@ domain: https://local.core_food.tw/
         - search Area
         - search food category
         - 右方 Search 摺疊狀況與實際檢索同步
+        - refactor Pager
    - ShopRanking
         - order
    - Refactor + SA
