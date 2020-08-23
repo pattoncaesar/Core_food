@@ -106,7 +106,7 @@
                             <ul class="sub">
                                 <li>
                                     <input type="checkbox" id="s-area{{$area_item->id}}"
-                                           @if ($local_id==0)  checked @endif>
+                                           @if ($area->id==$area_item->id&&$local_id==0)  checked @endif>
                                     <label for="s-area{{$area_item->id}}">全{{$area_item->area_name}}</label>
                                 </li>
                                 @foreach ($area_item->subarea->sortBy('order') as $area_sub)
