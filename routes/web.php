@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('shoplist/');
 });
 
 Route::get('/shop/{id}/', 'ShoptopController@index')->where('id', '[0-9]+');
