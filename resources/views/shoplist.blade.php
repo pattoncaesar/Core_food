@@ -101,26 +101,24 @@
                 <p class="typeTitle">地點</p>
                 <ul class="main metismenu" id="areaMenu">
                     @foreach ($area_list as $area_item)
-                        @if ($loop->first)
-                            <li class="m-list is-active">
-                        @else
-                            <li class="m-list ">
-                                @endif
-                                <p class="mainList"><span>{{$area_item->area_name}}</span></p>
-                                <ul class="sub">
+                        <li class="m-list @if ($area->id==$area_item->id) is-active @endif">
+                            <p class="mainList"><span>{{$area_item->area_name}}</span></p>
+                            <ul class="sub">
+                                <li>
+                                    <input type="checkbox" id="s-area{{$area_item->id}}"
+                                           @if ($local_id==0)  checked @endif>
+                                    <label for="s-area{{$area_item->id}}">全{{$area_item->area_name}}</label>
+                                </li>
+                                @foreach ($area_item->subarea->sortBy('order') as $area_sub)
                                     <li>
-                                        <input type="checkbox" id="s-area0" checked>
-                                        <label for="s-area0">全{{$area_item->area_name}}</label>
+                                        <input type="checkbox" id="s-area{{$area_sub->id}}"
+                                               @if ($local_id>0&& $local_id == $area_sub->id) checked @endif>
+                                        <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
                                     </li>
-                                    @foreach ($area_item->subarealist->sortBy('order') as $area_sub)
-                                        <li>
-                                            <input type="checkbox" id="s-area{{$area_sub->id}}">
-                                            <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </li>
-                            @endforeach
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
             <div class="searchFood">
@@ -165,9 +163,9 @@
 </footer>
 
 <script
-    src="https://code.jquery.com/jquery-3.5.1.js"
-    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-    crossorigin="anonymous"></script>
+        src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script>
 <script src="{{ URL::asset('/js/js.cookie.js') }}"></script>
 <script>
     $(window).on('load', function () {

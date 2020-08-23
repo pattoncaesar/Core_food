@@ -18,8 +18,12 @@ Route::get('/', function () {
 });
 
 Route::get('/shop/{id}/', 'ShoptopController@index')->where('id', '[0-9]+');
+Route::get('/shoplist/', 'ShoplistController@index');
+Route::get('/shoplist/', function () {
+    return redirect('shoplist/1/');
+});
 Route::get('/shoplist/{area_id}/', 'ShoplistController@index')->where('area_id', '[0-9]+');
-Route::get('/shoplist/{area_id}/{local_id}', 'ShoplistController@index')
+Route::get('/shoplist/{area_id}/{local_id}/', 'ShoplistController@index')
     ->where('area_id', '[0-9]+')
     ->where('local_id', '[0-9]+');
 

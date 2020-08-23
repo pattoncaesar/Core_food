@@ -22,13 +22,17 @@ class ShoplistController extends Controller
         //  default 台北市
         if (is_null($area_id) || $area_id < 1 || $area_id > 18) $area_id = 1;
 
-        //  validate local_id
-        $local_of_area = AreaSub::where('master_id', '=', $area_id)
-                ->where('id', '=', $local_id);
-        if ($local_of_area->count() != 1)   $local_id = null;
-
         //  Info for this area
         $area = AreaMain::find($area_id);
+
+        //  validate local_id
+        if($local_id){
+        preg_match('/^\d+/', $local_id, $output);
+        if(!is_null($output[0]) && $local_id>0){
+            $local_of_area = $area->subarea->where('id', '=', $local_id);
+            if ($local_of_area->count() != 1)   $local_id = 0;
+        }
+        }
 
         //  arealist, foodlist for right side menu
         $area_list = AreaMain::orderBy('order', 'asc')->get();
@@ -55,6 +59,7 @@ class ShoplistController extends Controller
                 'shop' => $shop,
                 'area_list' => $area_list,
                 'food_list' => $food_list,
+                'local_id' => $local_id,
             ]
         );
 

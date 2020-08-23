@@ -15,7 +15,7 @@ domain: https://local.core_food.tw/
         - ~~local_area~~
         - ~~摺疊*2~~
         - ~~pager~~
-        - 右方 Area 摺疊狀況與實際檢索同步
+        - ~~右方 Area 摺疊狀況與實際檢索同步~~
         - search Area
         - search food category
         - 右方 Search 摺疊狀況與實際檢索同步
