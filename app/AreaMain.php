@@ -11,7 +11,7 @@ class AreaMain extends Model
     {
         return $this->hasMany('App\ShopMain', 'main_area');
     }
-    public function subarealist()
+    public function subarea()
     {
         return $this->hasMany('App\AreaSub', 'master_id');
     }

@@ -1,20 +1,34 @@
 #   實作測驗改寫到 Laravel
 
-env:    LN_P    
+LN_P    
 domain: https://local.core_food.tw/
 
-dev:    
-   - SQLite + Seeder
-    
+##  dev:         
+- SQLite + Seeder    
+    1. .env：DB_CONNECTION=sqlite
+    2. database/database.sqlite
+    3. php artisan migrate
+    4. php artisan db:seed --class=SqlSeeder
+
 #   TODO
    - ShopList
         - ~~local_area~~
         - ~~摺疊*2~~
-        - 右方摺疊狀況與實際檢索同步
-        - search
-        - pager 
+        - ~~pager~~
+        - 右方 Area
+            - ~~摺疊狀況與實際檢索同步~~
+            - 切換時的 checkbox 切換
+            - search Area 
+            - 複合檢索
+        - 右方 Food
+            - 摺疊狀況與實際檢索同步
+            - 切換時的 checkbox 切換
+            - search food category
+            - 複合檢索
+        - refactor Pager
    - ShopRanking
         - order
+        - ...
    - Refactor + SA
    - Restful API
    - OAuth

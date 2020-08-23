@@ -20,7 +20,7 @@
 <header>
     <h1><span>{{$shop->shop_name}}-{{$shop->areamain->area_name}} {{$shop->areasub->area_name}}-</span></h1>
     <div class="headerLogo">
-        <a href="search"><img src="{{ URL::asset('/img/logo.png') }}" alt="LOGO"></a>
+        <a href="/shoplist/"><img src="{{ URL::asset('/img/logo.png') }}" alt="LOGO"></a>
     </div>
 </header>
 <div class="f-breadCrumbs u-container">
