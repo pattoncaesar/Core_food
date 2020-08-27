@@ -29,6 +29,7 @@ domain: https://local.core_food.tw/
    - ShopRanking
         - order
         - ...
+   - ShopTop 圖片用亂數
    - Refactor + SA
    - Restful API
    - OAuth

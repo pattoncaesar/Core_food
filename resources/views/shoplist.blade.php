@@ -51,7 +51,7 @@
                         </div>
                         <div class="shopDetail">
                             <div class="photo">
-                                <img src="{{ URL::asset('/img/shop/{photo_num}.png') }}" alt="">
+                                <img src="{{ URL::asset('/img/shop/'.$shop_item->photos[0]->photo_num.'.png') }}" alt="">
                             </div>
                             <div class="info">
                                 <div class="shopTitle">
