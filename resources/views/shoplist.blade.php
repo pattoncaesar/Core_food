@@ -105,14 +105,14 @@
                             <p class="mainList"><span>{{$area_item->area_name}}</span></p>
                             <ul class="sub">
                                 <li>
-                                    <input type="checkbox" id="s-area{{$area_item->id}}"
+                                    <input type="checkbox" id="master-area{{$area_item->id}}"
                                            @if ($area->id==$area_item->id&&$local_id==0)  checked @endif>
-                                    <label for="s-area{{$area_item->id}}">全{{$area_item->area_name}}</label>
+                                    <label for="master-area{{$area_item->id}}">全{{$area_item->area_name}}</label>
                                 </li>
                                 @foreach ($area_item->subarea->sortBy('order') as $area_sub)
                                     <li>
                                         <input type="checkbox" id="s-area{{$area_sub->id}}"
-                                               @if ($local_id>0&& $local_id == $area_sub->id) checked @endif>
+                                               @if (($local_id>0&& $local_id == $area_sub->id)||($area->id==$area_item->id&&$local_id==0)) checked @endif>
                                         <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
                                     </li>
                                 @endforeach
@@ -126,9 +126,9 @@
                 <ul class="main">
                     @foreach ($food_list as $food_item)
                         @if ($loop->first)
-                            <li class="m-list is-active">
+                            <li class="f-list is-active">
                         @else
-                            <li class="m-list ">
+                            <li class="f-list ">
                                 @endif
                                 <p class="mainList"><span>{{$food_item->food_name}}</span></p>
                                 <ul class="sub">
@@ -169,11 +169,37 @@
 <script src="{{ URL::asset('/js/js.cookie.js') }}"></script>
 <script>
     $(window).on('load', function () {
-        $('.m-list').click(function () {
-            $('.is-active').removeClass('is-active');
+        //  area menu
+        $('li.m-list').click(function () {
+            var $m_list_old =  $('.m-list.is-active').find('ul > li > input');
+            $m_list_old.prop( "checked", false );
+            $('.m-list.is-active').removeClass('is-active');
+
+            var $m_list_new =  $(this).closest('li').find('ul > li > input');
+            $m_list_new.prop( "checked", true );
             $(this).addClass('is-active');
         });
 
+        $("input[id^='master-area'], label[for^='master-area']").click(function () {
+            var $sub_area =  $(this).closest('ul').find('li > input').slice(1);
+
+            $sub_area.prop( "checked", $(this).prop( "checked") );
+
+            event.stopPropagation();
+        });
+
+        $("input[id^='s-area'], label[for^='s-area']").click(function () {
+            var $master_area =  $(this).closest('ul').find('li:first > input');
+            $master_area.prop( "checked", false );
+            event.stopPropagation();
+        });
+
+
+
+        //  food menu
+        //  TODO
+
+        //  like -> cookie
         $("button.like").each(function () {
             id = $(this).attr("value");
             if (typeof Cookies.get('shop_' + id + '_liked') === 'undefined' || Cookies.get('shop_' + id + '_liked') === 0) {
