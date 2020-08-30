@@ -23,21 +23,17 @@
         <li>></li>
         <li><a href="/shoplist/{{$area->id}}">{{$area->area_name}}</a></li>
         <li>></li>
-        <?php if (isset($sub_area) && $sub_area != null): ?>
-        <li><a href="/shoplist/{main_area}/{sub_area}">{area_main_name}・{area_subs_name}</a></li>
+        @if ($local_id>0)
+        <li><a href="/shoplist/{{$area->id}}/{{$local_id}}">{{$area->area_name}}・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}</a></li>
         <li>></li>
-        <?php endif ?>
+        @endif
         <li><span>查詢結果</span></li>
     </ul>
 </div>
 <div class="f-mainContents u-container">
     <div class="mainWrap">
-        <?php if (isset($area_main_name) && $area_main_name != null): ?>
-        <h2>{query} 查詢結果</h2>
-        <?php else: ?>
-        <h2>查詢結果</h2>
-        <?php endif ?>
-
+        <h2>{{$area->area_name}} @if ($local_id>0) ・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif
+          查詢結果</h2>
         <div class="m-pager">
             {{--            {!! $shop->links('pagination.default') !!}--}}
             {!! $shop->links() !!}
@@ -51,7 +47,8 @@
                         </div>
                         <div class="shopDetail">
                             <div class="photo">
-                                <img src="{{ URL::asset('/img/shop/'.$shop_item->photos[0]->photo_num.'.png') }}" alt="">
+                                <img src="{{ URL::asset('/img/shop/'.$shop_item->photos[0]->photo_num.'.png') }}"
+                                     alt="">
                             </div>
                             <div class="info">
                                 <div class="shopTitle">
@@ -112,7 +109,7 @@
                                 @foreach ($area_item->subarea->sortBy('order') as $area_sub)
                                     <li>
                                         <input type="checkbox" id="s-area{{$area_sub->id}}"
-                                               @if (($local_id>0&& $local_id == $area_sub->id)||($area->id==$area_item->id&&$local_id==0)) checked @endif>
+                                               @if ($local_id>0&& $local_id == $area_sub->id) checked @endif>
                                         <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
                                     </li>
                                 @endforeach
@@ -171,30 +168,26 @@
     $(window).on('load', function () {
         //  area menu
         $('li.m-list').click(function () {
-            var $m_list_old =  $('.m-list.is-active').find('ul > li > input');
-            $m_list_old.prop( "checked", false );
+            var $m_list_old = $('.m-list.is-active').find('ul > li > input');
+            $m_list_old.prop("checked", false);
             $('.m-list.is-active').removeClass('is-active');
 
-            var $m_list_new =  $(this).closest('li').find('ul > li > input');
-            $m_list_new.prop( "checked", true );
+            var $m_list_new = $(this).closest('li').find('ul > li:first > input');
+            $m_list_new.prop("checked", true);
             $(this).addClass('is-active');
         });
 
         $("input[id^='master-area'], label[for^='master-area']").click(function () {
-            var $sub_area =  $(this).closest('ul').find('li > input').slice(1);
-
-            $sub_area.prop( "checked", $(this).prop( "checked") );
-
+            var $sub_area = $(this).closest('ul').find('li > input').slice(1);
+            // $sub_area.prop( "checked", $(this).prop( "checked") );
             event.stopPropagation();
         });
 
         $("input[id^='s-area'], label[for^='s-area']").click(function () {
-            var $master_area =  $(this).closest('ul').find('li:first > input');
-            $master_area.prop( "checked", false );
+            var $master_area = $(this).closest('ul').find('li:first > input');
+            $master_area.prop("checked", false);
             event.stopPropagation();
         });
-
-
 
         //  food menu
         //  TODO
