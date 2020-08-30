@@ -17,7 +17,7 @@ domain: https://local.core_food.tw/
         - ~~pager~~
         - 右方 Area
             - ~~摺疊狀況與實際檢索同步~~
-            - 切換時的 checkbox 切換
+            - ~~切換時的 checkbox 切換~~
             - search Area 
             - 複合檢索
         - 右方 Food
