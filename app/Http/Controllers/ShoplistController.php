@@ -26,12 +26,12 @@ class ShoplistController extends Controller
         $area = AreaMain::find($area_id);
 
         //  validate local_id
-        if($local_id){
-        preg_match('/^\d+/', $local_id, $output);
-        if(!is_null($output[0]) && $local_id>0){
-            $local_of_area = $area->subarea->where('id', '=', $local_id);
-            if ($local_of_area->count() != 1)   $local_id = 0;
-        }
+        if ($local_id) {
+            preg_match('/^\d+/', $local_id, $output);
+            if (!is_null($output[0]) && $local_id > 0) {
+                $local_of_area = $area->subarea->where('id', '=', $local_id);
+                if ($local_of_area->count() != 1) $local_id = 0;
+            }
         }
 
         //  arealist, foodlist for right side menu
@@ -63,5 +63,14 @@ class ShoplistController extends Controller
             ]
         );
 
+    }
+
+    public function search(Request $request)
+    {
+        $master_area = $request->input('master_area') ?? $request->input('m_list_id');
+        return redirect()->route('shoplist.show', [
+            'area_id' => $master_area,
+            'local_id' => $request->input('sub_area'),
+        ]);
     }
 }

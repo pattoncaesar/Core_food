@@ -7,11 +7,11 @@
     <link href="{{ URL::asset('/css/common.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('/css/search.css') }}" rel="stylesheet">
 
-    <title>美食查詢-{{$area->area_name}}-</title>
+    <title>美食查詢-{{$area->area_name}}@if ($local_id>0)・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif-</title>
 </head>
 <body>
 <header>
-    <h1><span>{{$area->area_name}} 美食查詢</span></h1>
+    <h1><span>{{$area->area_name}}@if ($local_id>0)・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif 美食查詢</span></h1>
 
     <div class="headerLogo">
         <a href="/shoplist/"><img src="{{ URL::asset('/img/logo.png') }}" alt="LOGO"></a>
@@ -24,16 +24,18 @@
         <li><a href="/shoplist/{{$area->id}}">{{$area->area_name}}</a></li>
         <li>></li>
         @if ($local_id>0)
-        <li><a href="/shoplist/{{$area->id}}/{{$local_id}}">{{$area->area_name}}・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}</a></li>
-        <li>></li>
+            <li><a href="/shoplist/{{$area->id}}/{{$local_id}}">{{$area->area_name}}
+                    ・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}</a></li>
+            <li>></li>
         @endif
         <li><span>查詢結果</span></li>
     </ul>
 </div>
 <div class="f-mainContents u-container">
     <div class="mainWrap">
-        <h2>{{$area->area_name}} @if ($local_id>0) ・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif
-          查詢結果</h2>
+        <h2>{{$area->area_name}} @if ($local_id>0)
+                ・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif
+            查詢結果</h2>
         <div class="m-pager">
             {{--            {!! $shop->links('pagination.default') !!}--}}
             {!! $shop->links() !!}
@@ -92,63 +94,69 @@
         </div>
     </div>
     <div class="rightWrap">
-        <div class="r-searchMenu">
-            <p class="searchTitle"><span>查詢</span></p>
-            <div class="searchArea">
-                <p class="typeTitle">地點</p>
-                <ul class="main metismenu" id="areaMenu">
-                    @foreach ($area_list as $area_item)
-                        <li class="m-list @if ($area->id==$area_item->id) is-active @endif">
-                            <p class="mainList"><span>{{$area_item->area_name}}</span></p>
-                            <ul class="sub">
-                                <li>
-                                    <input type="checkbox" id="master-area{{$area_item->id}}"
-                                           @if ($area->id==$area_item->id&&$local_id==0)  checked @endif>
-                                    <label for="master-area{{$area_item->id}}">全{{$area_item->area_name}}</label>
-                                </li>
-                                @foreach ($area_item->subarea->sortBy('order') as $area_sub)
-                                    <li>
-                                        <input type="checkbox" id="s-area{{$area_sub->id}}"
-                                               @if ($local_id>0&& $local_id == $area_sub->id) checked @endif>
-                                        <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-            <div class="searchFood">
-                <p class="typeTitle">分類</p>
-                <ul class="main">
-                    @foreach ($food_list as $food_item)
-                        @if ($loop->first)
-                            <li class="f-list is-active">
-                        @else
-                            <li class="f-list ">
-                                @endif
-                                <p class="mainList"><span>{{$food_item->food_name}}</span></p>
+        <form action="{{url('shopsearch')}}" method="POST">
+            {{ csrf_field() }}
+            <div class="r-searchMenu">
+                <p class="searchTitle"><span>查詢</span></p>
+                <div class="searchArea">
+                    <p class="typeTitle">地點</p>
+                    <ul class="main metismenu" id="areaMenu">
+                        @foreach ($area_list as $area_item)
+                            <li class="m-list @if ($area->id==$area_item->id) is-active @endif">
+                                <p class="mainList"><span>{{$area_item->area_name}}</span></p>
                                 <ul class="sub">
                                     <li>
-                                        <input type="checkbox" id="s-genre0" checked>
-                                        <label for="s-genre0">全{{$food_item->food_name}}</label>
+                                        <input type="checkbox" id="master-area{{$area_item->id}}" name="master_area"
+                                               value="{{$area_item->id}}"
+                                               @if ($area->id==$area_item->id&&$local_id==0)  checked @endif>
+                                        <label for="master-area{{$area_item->id}}">全{{$area_item->area_name}}</label>
                                     </li>
-                                    @foreach ($food_item->subfoodlist->sortBy('order') as $food_sub)
+                                    @foreach ($area_item->subarea->sortBy('order') as $area_sub)
                                         <li>
-                                            <input type="checkbox" id="s-genre{{$food_sub->id}}">
-                                            <label for="s-genre{{$food_sub->id}}">{{$food_sub->food_name}}</label>
+                                            <input type="checkbox" id="s-area{{$area_sub->id}}" name="sub_area"
+                                                   value="{{$area_sub->id}}"
+                                                   @if ($local_id>0&& $local_id == $area_sub->id) checked @endif>
+                                            <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
                                         </li>
                                     @endforeach
                                 </ul>
                             </li>
-                            @endforeach
-                </ul>
+                        @endforeach
+                        <input id="m_list" name="m_list_id" type="hidden" value="{{$area_item->id}}">
+                    </ul>
+                </div>
+                <div class="searchFood">
+                    <p class="typeTitle">分類</p>
+                    <ul class="main">
+                        @foreach ($food_list as $food_item)
+                            @if ($loop->first)
+                                <li class="f-list is-active">
+                            @else
+                                <li class="f-list ">
+                                    @endif
+                                    <p class="mainList"><span>{{$food_item->food_name}}</span></p>
+                                    <ul class="sub">
+                                        <li>
+                                            <input type="checkbox" id="s-genre0" checked>
+                                            <label for="s-genre0">全{{$food_item->food_name}}</label>
+                                        </li>
+                                        @foreach ($food_item->subfoodlist->sortBy('order') as $food_sub)
+                                            <li>
+                                                <input type="checkbox" id="s-genre{{$food_sub->id}}">
+                                                <label for="s-genre{{$food_sub->id}}">{{$food_sub->food_name}}</label>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                                @endforeach
+                    </ul>
+                </div>
+                <div class="btnArea">
+                    <button type="submit" name="action" value="search" class="searchBtn">查詢</button>
+                    <button type="submit" name="action" value="ranking" class="rankingBtn" disabled>排行榜</button>
+                </div>
             </div>
-            <div class="btnArea">
-                <button class="searchBtn">查詢</button>
-                <button class="rankingBtn">排行榜</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 <footer class="f-footer">
@@ -175,6 +183,8 @@
             var $m_list_new = $(this).closest('li').find('ul > li:first > input');
             $m_list_new.prop("checked", true);
             $(this).addClass('is-active');
+
+            $('#m_list').val($m_list_new.val());
         });
 
         $("input[id^='master-area'], label[for^='master-area']").click(function () {
