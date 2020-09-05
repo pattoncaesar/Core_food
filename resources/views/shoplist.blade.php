@@ -7,11 +7,11 @@
     <link href="{{ URL::asset('/css/common.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('/css/search.css') }}" rel="stylesheet">
 
-    <title>美食查詢-{{$area->area_name}}-</title>
+    <title>美食查詢-{{$area->area_name}}@if ($local_id>0)・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif-</title>
 </head>
 <body>
 <header>
-    <h1><span>{{$area->area_name}} 美食查詢</span></h1>
+    <h1><span>{{$area->area_name}}@if ($local_id>0)・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif 美食查詢</span></h1>
 
     <div class="headerLogo">
         <a href="/shoplist/"><img src="{{ URL::asset('/img/logo.png') }}" alt="LOGO"></a>
