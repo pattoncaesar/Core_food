@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link href="{{ URL::asset('/css/common.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('/css/search.css') }}" rel="stylesheet">
-
-    <title>美食查詢-{{$area->area_name}}@if ($local_id>0)・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif-</title>
+    <title>美食查詢-{{$area->area_name}}@if ($local_id && count($local_id)==1)
+            ・{{$area->subarea->where('id', '=', $local_id[0])->first()->area_name}}@endif-</title>
 </head>
 <body>
 <header>
-    <h1><span>{{$area->area_name}}@if ($local_id>0)・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif 美食查詢</span></h1>
-
+    <h1><span>{{$area->area_name}}@if ($local_id && count($local_id)==1)
+                ・{{$area->subarea->where('id', '=', $local_id[0])->first()->area_name}}@endif 美食查詢</span></h1>
     <div class="headerLogo">
         <a href="/shoplist/"><img src="{{ URL::asset('/img/logo.png') }}" alt="LOGO"></a>
     </div>
@@ -23,9 +23,9 @@
         <li>></li>
         <li><a href="/shoplist/{{$area->id}}">{{$area->area_name}}</a></li>
         <li>></li>
-        @if ($local_id>0)
-            <li><a href="/shoplist/{{$area->id}}/{{$local_id}}">{{$area->area_name}}
-                    ・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}</a></li>
+        @if ($local_id && count($local_id)==1)
+            <li><a href="/shoplist/{{$area->id}}/{{$local_id[0]}}">{{$area->area_name}}
+                    ・{{$area->subarea->where('id', '=', $local_id[0])->first()->area_name}}</a></li>
             <li>></li>
         @endif
         <li><span>查詢結果</span></li>
@@ -33,8 +33,8 @@
 </div>
 <div class="f-mainContents u-container">
     <div class="mainWrap">
-        <h2>{{$area->area_name}} @if ($local_id>0)
-                ・{{$area->subarea->where('id', '=', $local_id)->first()->area_name}}@endif
+        <h2>{{$area->area_name}} @if ($local_id && count($local_id)==1)
+                ・{{$area->subarea->where('id', '=', $local_id[0])->first()->area_name}}@endif
             查詢結果</h2>
         <div class="m-pager">
             {{--            {!! $shop->links('pagination.default') !!}--}}
@@ -108,14 +108,14 @@
                                     <li>
                                         <input type="checkbox" id="master-area{{$area_item->id}}" name="master_area"
                                                value="{{$area_item->id}}"
-                                               @if ($area->id==$area_item->id&&$local_id==0)  checked @endif>
+                                               @if ($area->id==$area_item->id && !$local_id)  checked @endif>
                                         <label for="master-area{{$area_item->id}}">全{{$area_item->area_name}}</label>
                                     </li>
                                     @foreach ($area_item->subarea->sortBy('order') as $area_sub)
                                         <li>
-                                            <input type="checkbox" id="s-area{{$area_sub->id}}" name="sub_area"
+                                            <input type="checkbox" id="s-area{{$area_sub->id}}" name="sub_area[]"
                                                    value="{{$area_sub->id}}"
-                                                   @if ($local_id>0&& $local_id == $area_sub->id) checked @endif>
+                                                   @if ($local_id && in_array($area_sub->id, $local_id)) checked @endif>
                                             <label for="s-area{{$area_sub->id}}">{{$area_sub->area_name}}</label>
                                         </li>
                                     @endforeach
@@ -189,7 +189,7 @@
 
         $("input[id^='master-area'], label[for^='master-area']").click(function () {
             var $sub_area = $(this).closest('ul').find('li > input').slice(1);
-            // $sub_area.prop( "checked", $(this).prop( "checked") );
+            $sub_area.prop("checked", false);
             event.stopPropagation();
         });
 
@@ -197,6 +197,8 @@
             var $master_area = $(this).closest('ul').find('li:first > input');
             $master_area.prop("checked", false);
             event.stopPropagation();
+
+            $('#m_list').val($master_area.val());
         });
 
         //  food menu
@@ -224,7 +226,6 @@
                 //have cookies
                 $(evt.target).removeClass('is-active');
                 Cookies.remove('shop_' + id + '_liked');
-
             }
         });
     });

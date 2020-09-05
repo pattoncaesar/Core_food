@@ -30,18 +30,14 @@ class ShoplistController extends Controller
             preg_match('/^\d+/', $local_id, $output);
             if (!is_null($output[0]) && $local_id > 0) {
                 $local_of_area = $area->subarea->where('id', '=', $local_id);
-                if ($local_of_area->count() != 1) $local_id = 0;
+                if ($local_of_area->count() != 1) $local_id = null;     //  List->Single subarea
+                $local_arr[0] = $local_id;
             }
         }
 
         //  arealist, foodlist for right side menu
         $area_list = AreaMain::orderBy('order', 'asc')->get();
         $food_list = FoodMain::orderBy('order', 'asc')->get();
-
-        //  TODO: Move to Repository
-        //  User Story
-        //  AreaMain 1-m ShopMain
-        //  +FoodMain
 
 //        $t = AreaMain::find($area_id)->shopmains;
         if ($local_id) {
@@ -59,18 +55,55 @@ class ShoplistController extends Controller
                 'shop' => $shop,
                 'area_list' => $area_list,
                 'food_list' => $food_list,
-                'local_id' => $local_id,
+                'local_id' => $local_arr??null,
             ]
         );
 
     }
 
+    //  List Page -> Search
     public function search(Request $request)
     {
-        $master_area = $request->input('master_area') ?? $request->input('m_list_id');
-        return redirect()->route('shoplist.show', [
-            'area_id' => $master_area,
-            'local_id' => $request->input('sub_area'),
-        ]);
+        /*
+         * Use Case：
+         * - 全XXX local=0（All subarea）
+         * - single subarea
+         * - multiple subarea
+         */
+
+        //  TODO: validate input
+
+        $area_id = $request->input('master_area') ?? $request->input('m_list_id');
+        $local_id = $request->input('sub_area');
+
+        ///////////////////////////////
+        /// TODO: repository
+        //  Info for this area
+        $area = AreaMain::find($area_id);
+
+        //  arealist, foodlist for right side menu
+        $area_list = AreaMain::orderBy('order', 'asc')->get();
+        $food_list = FoodMain::orderBy('order', 'asc')->get();
+
+        if ($local_id) {
+            $shop = ShopMain::where('main_area', '=', $area_id)
+                ->whereIn('sub_area', $local_id)
+                ->paginate(20);
+        } else {
+            $shop = ShopMain::where('main_area', '=', $area_id)
+                ->paginate(20);
+        }
+
+        return view('shoplist',
+            [
+                'area' => $area,
+                'shop' => $shop,
+                'area_list' => $area_list,
+                'food_list' => $food_list,
+                'local_id' => $local_id,
+            ]
+        );
+        //////////////////////////////
     }
 }
+
