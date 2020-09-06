@@ -29,6 +29,9 @@ domain: https://local.core_food.tw/
             - 複合檢索
         - refactor Pager
    - Refactor + SA
+        - Repository
+        - Service
+        - Singleton
    - ShopRanking
         - order
         - ...
