@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\AreaMain;
-use App\AreaSub;
-use App\FoodMain;
+use App\Repositories\ShopRepository;
+use App\Repositories\AreaRepository;
+use App\Repositories\FoodRepository;
 use App\ShopMain;
 use DB;
 use Illuminate\Http\Request;
@@ -17,13 +17,26 @@ use Illuminate\Http\Request;
 
 class ShoplistController extends Controller
 {
+    protected $areaRepository;
+    protected $areaList;
+    protected $foodList;
+
+    public function __construct()
+    {
+        $this->areaRepository = new AreaRepository();
+        $this->areaList = $this->areaRepository->getListinASC();
+        $this->foodList = (new FoodRepository())->getListinASC();
+    }
+
     public function index($area_id, $local_id = null)
     {
         //  default 台北市
         if (is_null($area_id) || $area_id < 1 || $area_id > 18) $area_id = 1;
 
+        ///////////////////////////////
+        /// TODO: service-repository
         //  Info for this area
-        $area = AreaMain::find($area_id);
+        $area = $this->areaRepository->find($area_id);
 
         //  validate local_id
         if ($local_id) {
@@ -35,30 +48,15 @@ class ShoplistController extends Controller
             }
         }
 
-        //  arealist, foodlist for right side menu
-        $area_list = AreaMain::orderBy('order', 'asc')->get();
-        $food_list = FoodMain::orderBy('order', 'asc')->get();
-
-//        $t = AreaMain::find($area_id)->shopmains;
-        if ($local_id) {
-            $shop = ShopMain::where('main_area', '=', $area_id)
-                ->where('sub_area', '=', $local_id)
-                ->paginate(20);
-        } else {
-            $shop = ShopMain::where('main_area', '=', $area_id)
-                ->paginate(20);
-        }
-
         return view('shoplist',
             [
                 'area' => $area,
-                'shop' => $shop,
-                'area_list' => $area_list,
-                'food_list' => $food_list,
+                'shop' => (new ShopRepository())->getList($area_id, $local_arr??null, 20),
+                'area_list' => $this->areaList,
+                'food_list' => $this->foodList,
                 'local_id' => $local_arr??null,
             ]
         );
-
     }
 
     //  List Page -> Search
@@ -72,38 +70,18 @@ class ShoplistController extends Controller
          */
 
         //  TODO: validate input
-
         $area_id = $request->input('master_area') ?? $request->input('m_list_id');
         $local_id = $request->input('sub_area');
 
-        ///////////////////////////////
-        /// TODO: repository
-        //  Info for this area
-        $area = AreaMain::find($area_id);
-
-        //  arealist, foodlist for right side menu
-        $area_list = AreaMain::orderBy('order', 'asc')->get();
-        $food_list = FoodMain::orderBy('order', 'asc')->get();
-
-        if ($local_id) {
-            $shop = ShopMain::where('main_area', '=', $area_id)
-                ->whereIn('sub_area', $local_id)
-                ->paginate(20);
-        } else {
-            $shop = ShopMain::where('main_area', '=', $area_id)
-                ->paginate(20);
-        }
-
         return view('shoplist',
             [
-                'area' => $area,
-                'shop' => $shop,
-                'area_list' => $area_list,
-                'food_list' => $food_list,
+                'area' => $this->areaRepository->find($area_id),
+                'shop' => (new ShopRepository())->getList($area_id, $local_id, 20),
+                'area_list' => $this->areaList,
+                'food_list' => $this->foodList,
                 'local_id' => $local_id,
             ]
         );
-        //////////////////////////////
     }
 }
 

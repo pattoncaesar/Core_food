@@ -19,7 +19,7 @@
 </header>
 <div class="f-breadCrumbs u-container">
     <ul>
-        <li><a href="search">首頁</a></li>
+        <li><a href="/shoplist/">首頁</a></li>
         <li>></li>
         <li><a href="/shoplist/{{$area->id}}">{{$area->area_name}}</a></li>
         <li>></li>
