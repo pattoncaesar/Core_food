@@ -21,13 +21,10 @@ class ShopRepository extends Repository
             return $this->model->where('main_area', '=', $main_area)
                 ->whereIn('sub_area', $sub_area)
                 ->paginate($per_page_num);
-            //TODO
-//                ->withPath('shoplist/'.$main_area.'/');
+                //->paginate($per_page_num,['*'],'page',$page_num);
         } else {
             return $this->model->where('main_area', '=', $main_area)
                 ->paginate($per_page_num);
-            //TODO
-  //              ->withPath('shoplist/'.$main_area.'/');
         }
     }
 }
