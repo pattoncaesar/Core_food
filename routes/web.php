@@ -27,9 +27,6 @@ Route::get('/shoplist/{area_id}/{local_id?}/', 'ShoplistController@index')
     ->where('area_id', '[0-9]+')
     ->where('local_id', '[0-9]+')
     ->name('shoplist.show');
-Route::post('/shopsearch/', 'ShoplistController@search');
 
-//Route::get('/search/{area_id}', 'ShopSearchController@index')->where('area_id', '[0-9]+');
-//Route::get('/search/{area_id}/{local_id}', 'ShopSearchController@index')
-//    ->where('area_id', '[0-9]+')
-//    ->where('local_id', '[0-9]+');
+Route::post('/shopsearch/', 'ShoplistController@search');
+Route::get('/shopsearch', 'ShoplistController@search');

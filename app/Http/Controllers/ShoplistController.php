@@ -40,10 +40,10 @@ class ShoplistController extends Controller
         return view('shoplist',
             [
                 'area' => $area,
-                'shop' => $this->shopService->getList($area_id, ($local_id)?[0=>$local_id]:null),
+                'shop' => $this->shopService->getList($area_id, ($local_id) ? [0 => $local_id] : null),
                 'area_list' => $this->areaList,
                 'food_list' => $this->foodList,
-                'local_id' => ($local_id)?[0=>$local_id]:null,
+                'local_id' => ($local_id) ? [0 => $local_id] : null,
             ]
         );
     }
@@ -57,9 +57,21 @@ class ShoplistController extends Controller
          * - single subarea
          * - multiple subarea
          */
-
-        $area_id = $request->input('master_area') ?? $request->input('m_list_id');
-        $local_id = $request->input('sub_area');
+        if (($request->input('master_area') || $request->input('m_list_id'))) {
+            $area_id = $request->input('master_area') ?? $request->input('m_list_id');
+            $local_id = $request->input('sub_area');
+            $shopSearch['area'] = $area_id;
+            $shopSearch['local'] = $local_id;
+            $request->session()->put('shopSearch', $shopSearch);
+        } else {
+            $shopSearch = $request->session()->get('shopSearch');
+            if ($shopSearch) {
+                $area_id = $shopSearch['area'];
+                $local_id = $shopSearch['local'];
+            } else {
+                redirect('shoplist/1/');
+            }
+        }
 
         return view('shoplist',
             [
