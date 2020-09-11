@@ -25,11 +25,11 @@
 </header>
 <div class="f-breadCrumbs u-container">
     <ul>
-        <li><a href="search">首頁</a></li>
+        <li><a href="/shoplist/">首頁</a></li>
         <li>></li>
-        <li><a href="search/{main_area}">{{$shop->areamain->area_name}}</a></li>
+        <li><a href="/shoplist/{{$shop->areamain->id}}">{{$shop->areamain->area_name}}</a></li>
         <li>></li>
-        <li><a href="search/{main_area}/{sub_area}">{{$shop->areamain->area_name}}・{{$shop->areasub->area_name}}</a>
+        <li><a href="/shoplist/{{$shop->areamain->id}}/{{$shop->areasub->id}}">{{$shop->areamain->area_name}}・{{$shop->areasub->area_name}}</a>
         </li>
         <li>></li>
         <li><span>{{$shop->shop_name}}-{{$shop->areamain->area_name}}-</span></li>
@@ -41,7 +41,7 @@
     </h2>
     <div class="linkBtn">
         <button class="like u-hoverOpacity">LIKE</button>
-        <a href="shopcomment/{{$shop->id}}" class="comment">分享文</a>
+{{--        <a href="shopcomment/{{$shop->id}}" class="comment">分享文</a>--}}
     </div>
     <p class="shopTitle">
         {{$shop->main_title}}
