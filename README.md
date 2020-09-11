@@ -33,6 +33,7 @@ domain: https://local.core_food.tw/
         - ~~Service~~
         - inject
         - Singleton
+        - 版面
    - ~~DEBUG: Url in Pagenation~~
    - SA
    - ShopRanking
