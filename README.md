@@ -3,7 +3,7 @@
 LN_P    
 domain: https://local.core_food.tw/
 
-##  dev:         
+##  開發環境:         
 - SQLite + Seeder    
     1. .env：DB_CONNECTION=sqlite
     2. database/database.sqlite
@@ -28,18 +28,19 @@ domain: https://local.core_food.tw/
             - search food category
             - 複合檢索
         - refactor Pager
-   - Refactor + SA
+   - Refactor
         - ~~Repository~~
         - ~~Service~~
         - inject
         - Singleton
-   - DEBUG: Url in Pagenation
+   - ~~DEBUG: Url in Pagenation~~
+   - SA
    - ShopRanking
         - order
         - ...
-   - ShopTop 圖片用亂數
-   - Restful API
+   - ~~ShopTop 圖片用亂數~~
    - OAuth
+   - Restful API
    - ShopComment
    - Android
    - MySQL -> LNMP
