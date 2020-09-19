@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ShopService;
 use App\Repositories\AreaRepository;
 use App\Repositories\FoodRepository;
+use App\Repositories\ShopRepository;
 use DB;
 use Illuminate\Http\Request;
 
@@ -17,16 +17,18 @@ use Illuminate\Http\Request;
 class ShoplistController extends Controller
 {
     protected $areaRepository;
+    protected $shopRepository;
+    protected $foodRepository;
     protected $areaList;
     protected $foodList;
-    protected $shopService;
 
-    public function __construct()
+    public function __construct(ShopRepository $shop_repo, AreaRepository $area_repo, FoodRepository $food_repo)
     {
-        $this->shopService = new ShopService();
-        $this->areaRepository = new AreaRepository();
+        $this->shopRepository = $shop_repo;
+        $this->areaRepository = $area_repo;
+        $this->foodRepository = $food_repo;
         $this->areaList = $this->areaRepository->getListinASC();
-        $this->foodList = (new FoodRepository())->getListinASC();
+        $this->foodList = $this->foodRepository->getListinASC();
     }
 
     public function index($area_id, $local_id = null)
@@ -40,7 +42,7 @@ class ShoplistController extends Controller
         return view('shoplist',
             [
                 'area' => $area,
-                'shop' => $this->shopService->getList($area_id, ($local_id) ? [0 => $local_id] : null),
+                'shop' => $this->shopRepository->getList($area_id, ($local_id) ? [0 => $local_id] : null),
                 'area_list' => $this->areaList,
                 'food_list' => $this->foodList,
                 'local_id' => ($local_id) ? [0 => $local_id] : null,
@@ -57,18 +59,14 @@ class ShoplistController extends Controller
          * - single subarea
          * - multiple subarea
          */
-        if (($request->input('master_area') || $request->input('m_list_id'))) {
-            $area_id = $request->input('master_area') ?? $request->input('m_list_id');
-            $local_id = $request->input('sub_area');
-            $shopSearch['area'] = $area_id;
-            $shopSearch['local'] = $local_id;
-            $request->session()->put('shopSearch', $shopSearch);
+        $area_id = $request->input('master_area') ?? $request->input('m_list_id');
+        $local_id = $request->input('sub_area');
+
+        if ($area_id) {
+            $request->session()->put('shopSearch', ['area' => $area_id, 'local' => $local_id]);
         } else {
-            $shopSearch = $request->session()->get('shopSearch');
-            if ($shopSearch) {
-                $area_id = $shopSearch['area'];
-                $local_id = $shopSearch['local'];
-            } else {
+            list('area' => $area_id, 'local' => $local_id) = $request->session()->get('shopSearch');
+            if (!$area_id) {
                 redirect('shoplist/1/');
             }
         }
@@ -76,7 +74,7 @@ class ShoplistController extends Controller
         return view('shoplist',
             [
                 'area' => $this->areaRepository->find($area_id),
-                'shop' => $this->shopService->getList($area_id, $local_id),
+                'shop' => $this->shopRepository->getList($area_id, $local_id),
                 'area_list' => $this->areaList,
                 'food_list' => $this->foodList,
                 'local_id' => $local_id,

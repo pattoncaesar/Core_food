@@ -1,9 +1,13 @@
 #   實作測驗改寫到 Laravel
-
-LN_P    
 domain: https://local.core_food.tw/
-
+##  Function List：
+- ShopList
+- ShopRanking
+- ShopTop
+- ShopComment
+    
 ##  開發環境:         
+- LN_P
 - SQLite + Seeder    
     1. .env：DB_CONNECTION=sqlite
     2. database/database.sqlite
@@ -30,10 +34,10 @@ domain: https://local.core_food.tw/
         - refactor Pager
    - Refactor
         - ~~Repository~~
-        - ~~Service~~
-        - inject
+        - Service
+        - ~~DI~~
         - Singleton
-        - 版面
+        - 版面切割
    - ~~DEBUG: Url in Pagenation~~
    - SA
    - ShopRanking
