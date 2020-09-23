@@ -24,10 +24,11 @@ services:
 
   # php-fpm
   php-fpm:
+    build: ./docker/php
     container_name: php
     networks:
       - backend
-    image: php:7.3-fpm
+#    image: php:7.3-fpm
     expose:
       - 9000
     tty: true
@@ -37,3 +38,34 @@ services:
       - ./docker/php/php-fpm.d:/usr/local/etc/php-fpm.d
       - ./docker/ssl:/etc/ssl
       - ./:/var/www/html/core_food
+
+  # database
+  database:
+    container_name: mysql
+    networks:
+      - backend
+    ports:
+      - "3306:3306"
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./docker/mysql/local.cnf:/etc/mysql/conf.d/local.cnf:ro
+      - ./docker/mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: corefood
+      MYSQL_USER: core
+      MYSQL_PASSWORD: food
+
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - database
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: admin
+    networks:
+      - backend

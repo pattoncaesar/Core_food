@@ -6,13 +6,35 @@ domain: https://local.core_food.tw/
 - ShopTop
 - ShopComment
     
-##  開發環境:         
-- LN_P
+##  開發環境:
+add to host
+```
+127.0.0.1	local.core_food.tw mysql
+```
+### 兩個環境選一個：         
 - SQLite + Seeder    
     1. .env：DB_CONNECTION=sqlite
     2. database/database.sqlite
-    3. php artisan migrate
-    4. php artisan db:seed --class=SqlSeeder
+- LNMP 
+    1. .env
+        ```dotenv
+        DB_CONNECTION=mysql
+        DB_HOST=mysql
+        DB_PORT=3306
+        DB_DATABASE=corefood
+        DB_USERNAME=core
+        DB_PASSWORD=food
+        ```
+    2. docker-compose up -d
+    3. phpmyadmin http://127.0.0.1:8080/
+    4. MySQL 8 的坑－密碼編碼方式不對稱
+        ```mysql
+        ALTER USER 'core'@'%' IDENTIFIED WITH mysql_native_password BY 'food';
+        ```
+ 
+ ### Data
+1. php artisan migrate
+2. php artisan db:seed --class=SqlSeeder
 
 #   TODO
    - ShopList
