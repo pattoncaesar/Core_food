@@ -68,6 +68,8 @@ add to host
    - ~~ShopTop 圖片用亂數~~
    - OAuth
    - Restful API
+        - ~~get~~
+        - post
    - ShopComment
    - Android
    - MySQL -> LNMP

@@ -21,5 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //  /api/shops/
 Route::get('shops', 'ApiController@getAllShops');
 //  /api/shops/1/
-Route::get('shops/{areaId}', 'ApiController@getAllShops');
+Route::get('shops/{area_id}/{local_id?}/', 'ApiController@getAllShops');
 
