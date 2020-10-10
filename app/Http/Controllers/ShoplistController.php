@@ -66,14 +66,14 @@ class ShoplistController extends Controller
         $put_to_session = [];
         if ($m_food_id) {
             $put_to_session['m_food'] = $m_food_id;
-//            $put_to_session['s_food'] = $s_food_id;
+            $put_to_session['s_food'] = $s_food_id;
         }
 
         if ($area_id) {
             $put_to_session['area'] = $area_id;
             $put_to_session['local'] = $local_id;
         } else {
-            list('area' => $area_id, 'local' => $local_id, 'm_food' => $m_food_id) = $request->session()->get('shopSearch');
+            list('area' => $area_id, 'local' => $local_id, 'm_food' => $m_food_id, 's_food' => $s_food_id) = $request->session()->get('shopSearch');
             if (!$area_id) redirect('shoplist/1/');
         }
 
@@ -87,6 +87,7 @@ class ShoplistController extends Controller
                 'area_list' => $this->areaList,
                 'food_list' => $this->foodList,
                 'local_id' => $local_id,
+                'sub_food_id' => $s_food_id
             ]
         );
     }

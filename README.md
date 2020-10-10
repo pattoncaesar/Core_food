@@ -52,12 +52,12 @@ add to host
             - ~~複合檢索 => search_result~~
                 - ~~hidden 紀錄 master 的方式要換~~
                 - ~~master, sub : single, multi => 4+ 可能性~~
-        - 右方 Food
+        - ~~右方 Food~~
             - ~~摺疊狀況與實際檢索同步~~
             - ~~切換時的 checkbox 切換~~
-            - search food category
-            - 複合檢索
-            - sub food
+            - ~~search food category~~
+            - ~~複合檢索~~
+            - ~~sub food~~
         - refactor Pager
    - Refactor
         - ~~Repository~~
