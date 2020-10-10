@@ -122,33 +122,34 @@
                                 </ul>
                             </li>
                         @endforeach
-                        <input id="m_list" name="m_list_id" type="hidden" value="{{$area_item->id}}">
+                        <input id="m_list" name="m_list_id" type="hidden" value="{{$area->id}}">
                     </ul>
                 </div>
                 <div class="searchFood">
                     <p class="typeTitle">分類</p>
-                    <ul class="main">
+                    <ul class="main" id="food_menu">
                         @foreach ($food_list as $food_item)
-                            @if ($loop->first)
-                                <li class="f-list is-active">
-                            @else
-                                <li class="f-list ">
-                                    @endif
-                                    <p class="mainList"><span>{{$food_item->food_name}}</span></p>
-                                    <ul class="sub">
+                            <li class="f-list @if (isset($food) && $food->id==$food_item->id) is-active @endif">
+                                <p class="mainList"><span>{{$food_item->food_name}}</span></p>
+                                <ul class="sub">
+                                    <li>
+                                        <input type="checkbox" id="master-food{{$food_item->id}}" name="master_food"
+                                               value="{{$food_item->id}}"
+                                               @if (isset($food) && $food->id==$food_item->id && !isset($sub_food_id))  checked @endif>
+                                        <label for="master-food{{$food_item->id}}">全{{$food_item->food_name}}</label>
+                                    </li>
+                                    @foreach ($food_item->subfood->sortBy('order') as $food_sub)
                                         <li>
-                                            <input type="checkbox" id="s-genre0" checked>
-                                            <label for="s-genre0">全{{$food_item->food_name}}</label>
+                                            <input type="checkbox" id="s-food{{$food_sub->id}}" name="sub_food[]"
+                                                   value="{{$food_sub->id}}"
+                                                   @if (isset($sub_food_id) && in_array($food_sub->id, $sub_food_id)) checked @endif>
+                                            <label for="s-food{{$food_sub->id}}">{{$food_sub->food_name}}</label>
                                         </li>
-                                        @foreach ($food_item->subfoodlist->sortBy('order') as $food_sub)
-                                            <li>
-                                                <input type="checkbox" id="s-genre{{$food_sub->id}}">
-                                                <label for="s-genre{{$food_sub->id}}">{{$food_sub->food_name}}</label>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </li>
-                                @endforeach
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endforeach
+                        <input id="f_list" name="f_list_id" type="hidden" value="{{$food->id??null}}">
                     </ul>
                 </div>
                 <div class="btnArea">
@@ -168,9 +169,9 @@
 </footer>
 
 <script
-        src="https://code.jquery.com/jquery-3.5.1.js"
-        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-        crossorigin="anonymous"></script>
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
 <script src="{{ URL::asset('/js/js.cookie.js') }}"></script>
 <script>
     $(window).on('load', function () {
@@ -202,7 +203,31 @@
         });
 
         //  food menu
-        //  TODO
+        $('li.f-list').click(function () {
+            var $f_list_old = $('.f-list.is-active').find('ul > li > input');
+            $f_list_old.prop("checked", false);
+            $('.f-list.is-active').removeClass('is-active');
+
+            var $f_list_new = $(this).closest('li').find('ul > li:first > input');
+            $f_list_new.prop("checked", true);
+            $(this).addClass('is-active');
+
+            $('#f_list').val($f_list_new.val());
+        });
+
+        $("input[id^='master-food'], label[for^='master-food']").click(function () {
+            var $sub_food = $(this).closest('ul').find('li > input').slice(1);
+            $sub_food.prop("checked", false);
+            event.stopPropagation();
+        });
+
+        $("input[id^='s-food'], label[for^='s-food']").click(function () {
+            var $master_food = $(this).closest('ul').find('li:first > input');
+            $master_food.prop("checked", false);
+            event.stopPropagation();
+
+            $('#f_list').val($master_food.val());
+        });
 
         //  like -> cookie
         $("button.like").each(function () {

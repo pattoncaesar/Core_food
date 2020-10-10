@@ -14,17 +14,13 @@ class ShopRepository extends Repository
 //        $this->model = $shop;
     }
 
-    public function getList($main_area, $sub_area = null, $per_page_num = 20)
+    public function getList($main_area, $sub_area = null, $main_food = null, $s_food = null, $per_page_num = 20)
     {
+        $query = ShopMain::where('main_area', '=', $main_area);
 
-        if ($sub_area) {
-            return ShopMain::where('main_area', '=', $main_area)
-                ->whereIn('sub_area', $sub_area)
-                ->paginate($per_page_num);
-                //->paginate($per_page_num,['*'],'page',$page_num);
-        } else {
-            return ShopMain::where('main_area', '=', $main_area)
-                ->paginate($per_page_num);
-        }
+        if ($sub_area) $query->whereIn('sub_area', $sub_area);
+        if ($main_food) $query->where('main_food', $main_food);
+
+        return $query->paginate($per_page_num);
     }
 }

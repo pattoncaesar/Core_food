@@ -1,10 +1,14 @@
 #   實作測驗改寫到 Laravel
 domain: https://local.core_food.tw/
 ##  Function List：
-- ShopList
-- ShopRanking
-- ShopTop
-- ShopComment
+### common
+- Header -> search / list status
+- 麵包屑
+### Shop Info related
+- List / Filter
+- Search Shop
+- Shop Comment
+- Shop Detail
     
 ##  開發環境:
 add to host
@@ -49,10 +53,11 @@ add to host
                 - ~~hidden 紀錄 master 的方式要換~~
                 - ~~master, sub : single, multi => 4+ 可能性~~
         - 右方 Food
-            - 摺疊狀況與實際檢索同步
-            - 切換時的 checkbox 切換
+            - ~~摺疊狀況與實際檢索同步~~
+            - ~~切換時的 checkbox 切換~~
             - search food category
             - 複合檢索
+            - sub food
         - refactor Pager
    - Refactor
         - ~~Repository~~
