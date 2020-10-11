@@ -24,8 +24,7 @@ RUN docker-php-ext-install mysqli
 #  && apt-get install -y git \
 #  && apt-get clean
 #
-## redis xdebug swoole
-#RUN pecl install redis-5.0.2 \
-#    && pecl install xdebug-2.7.2 \
-#    && pecl install swoole-4.4.2 \
-#    && docker-php-ext-enable redis xdebug swoole
+
+##  xdebug
+RUN pecl install xdebug-2.7.2 \
+    && docker-php-ext-enable xdebug
