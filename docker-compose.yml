@@ -20,7 +20,7 @@ services:
       - ./docker/log/nginx:/var/log/nginx
       - ./docker/nginx/conf:/etc/nginx/conf.d
       - ./docker/ssl:/etc/ssl
-      - ./:/var/www/html/core_food
+      - ./:/var/www/html/Core_food
 
   # php-fpm
   php-fpm:
@@ -37,7 +37,7 @@ services:
       - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./docker/php/php-fpm.d:/usr/local/etc/php-fpm.d
       - ./docker/ssl:/etc/ssl
-      - ./:/var/www/html/core_food
+      - ./:/var/www/html/Core_food
 
   # database
   database:
