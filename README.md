@@ -40,6 +40,20 @@ add to host
 1. php artisan migrate
 2. php artisan db:seed --class=SqlSeeder
 
+### xDebug for VSCODE
+```json
+        {
+            "name": "Listen for CodeServer",
+            "type": "php",
+            "request": "launch",
+            "port": 9000,
+            "pathMappings": {
+                "/var/www/html/${workspaceFolderBasename}": "${workspaceFolder}"
+            },
+        },
+```
+
+
 #   TODO
    - ShopList
         - ~~local_area~~
@@ -80,3 +94,8 @@ add to host
    - MySQL -> LNMP
    - Vue
     
+
+
+
+
+
