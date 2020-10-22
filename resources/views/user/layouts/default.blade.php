@@ -4,97 +4,27 @@
     <meta charset="UTF-8">
     <meta name="format-detection" content="telephone=no,address=no,email=no">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link href="{{ URL::asset('/css/common.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('/css/search.css') }}" rel="stylesheet">
+    @stack('styles')
     <title>@yield('title')</title>
 </head>
 <body>
 
-@include('user.layouts.header')
+@include('user.layouts.header', ['data' => $data['header_h1']])
 
-<div class="f-breadCrumbs u-container">
-    <ul>
-        <li><a href="/shoplist/">首頁</a></li>
-        <li>></li>
-        <li><a href="/shoplist/{{$area->id}}">{{$area->area_name}}</a></li>
-        <li>></li>
-        @if ($local_id && count($local_id)==1)
-            <li><a href="/shoplist/{{$area->id}}/{{$local_id[0]}}">{{$area->area_name}}
-                    ・{{$area->subarea->where('id', '=', $local_id[0])->first()->area_name}}</a></li>
-            <li>></li>
-        @endif
-        <li><span>查詢結果</span></li>
-    </ul>
-</div>
+@include('user.layouts.bread_crumbs', ['data' => $data['bread_crumbs']])
+
 <div class="f-mainContents u-container">
     <div class="mainWrap">
-        <h2>{{$area->area_name}} @if ($local_id && count($local_id)==1)
-                ・{{$area->subarea->where('id', '=', $local_id[0])->first()->area_name}}@endif
-            查詢結果</h2>
-        <div class="m-pager">
-            {{--            {!! $shop->links('pagination.default') !!}--}}
-            {!! $shop->links() !!}
-        </div>
-        <div class="m-shopList">
-            <ul>
-                @foreach ($shop as $shop_item)
-                    <li class="shopData">
-                        <div class="shopHead">
-                            <a href="/shop/{{$shop_item->id}}">{{$shop_item->shop_name}}</a>
-                        </div>
-                        <div class="shopDetail">
-                            <div class="photo">
-                                <img src="{{ URL::asset('/img/shop/'.$shop_item->photos[0]->photo_num.'.png') }}"
-                                     alt="">
-                            </div>
-                            <div class="info">
-                                <div class="shopTitle">
-                                    <p>{{$shop_item->main_title}}</p>
-                                </div>
-                                <table>
-                                    <tr>
-                                        <th>分類</th>
-                                        <td>{{$shop_item->foodmain->food_name}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>標籤</th>
-                                        <td>
-                                            <ul class="foodTags">
-                                                @foreach ($shop_item->foodTags as $food_tag)
-                                                    <li>{{$food_tag->foodsub->food_name}}</li>
-                                                @endforeach
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>營業時間</th>
-                                        <td>{{$shop_item->open_time}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>地址</th>
-                                        <td>{{$shop_item->address}}</td>
-                                    </tr>
-                                </table>
-                                <div class="linkBtn">
-                                    <button class="like u-hoverOpacity" value="{{$shop_item->id}}">LIKE</button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-        <div class="m-pager">
-            {!! $shop->links() !!}
-        </div>
+        @yield('content')
     </div>
 
-    @include('user.layouts.right_search_menu')
+    @includeWhen(isset($data['b_right_search_menu'])&&$data['b_right_search_menu']==true,'user.layouts.right_search_menu')
 
 </div>
 
 @include('user.layouts.footer')
 
+@stack('scripts')
 <script
     src="https://code.jquery.com/jquery-3.5.1.js"
     integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="

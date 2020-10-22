@@ -1,47 +1,33 @@
-<!DOCTYPE html>
-<html lang="zh-tw">
-<head>
-    <meta charset="UTF-8">
-    <meta name="format-detection" content="telephone=no,address=no,email=no">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link href="{{ URL::asset('/css/common.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('/css/shoptop.css') }}" rel="stylesheet">
+<?php
+//  TODO:  Refactor
+$bread_crumbs = [
+    ['url' => '/shoplist/' . $shop->areamain->id, 'context' => $shop->areamain->area_name],
+    ['url' => '/shoplist/' . $shop->areamain->id . '/' . $shop->areasub->id, 'context' => $shop->areamain->area_name . '・' . $shop->areasub->area_name],
+    ['url' => '', 'context' => '<span>' . $shop->shop_name . '-' . $shop->areamain->area_name . '-</span>'],
+];
 
-    <link rel="stylesheet" href="{{ URL::asset('/js/woocommerce-FlexSlider-53570ee/flexslider.css')}}" type="text/css">
+$header_h1 = $shop->shop_name . '-' . $shop->areamain->area_name . ' ' . $shop->areasub->area_name . '-';
 
-    <script src="{{ URL::asset('/js/jquery.min.js') }}"></script>
-    <script src="{{ URL::asset('/js/jquery-migrate-3.0.min.js') }}"></script>
-    <script src="{{ URL::asset('/js/woocommerce-FlexSlider-53570ee/jquery.flexslider.js') }}"></script>
-    <script src="{{ URL::asset('/js/js.cookie.js') }}"></script>
+?>
 
-    <title>{{$shop->shop_name}}-{{$shop->areamain->area_name}}-</title>
-</head>
-<body>
-<header>
-    <h1><span>{{$shop->shop_name}}-{{$shop->areamain->area_name}} {{$shop->areasub->area_name}}-</span></h1>
-    <div class="headerLogo">
-        <a href="/shoplist/"><img src="{{ URL::asset('/img/logo.png') }}" alt="LOGO"></a>
-    </div>
-</header>
-<div class="f-breadCrumbs u-container">
-    <ul>
-        <li><a href="/shoplist/">首頁</a></li>
-        <li>></li>
-        <li><a href="/shoplist/{{$shop->areamain->id}}">{{$shop->areamain->area_name}}</a></li>
-        <li>></li>
-        <li><a href="/shoplist/{{$shop->areamain->id}}/{{$shop->areasub->id}}">{{$shop->areamain->area_name}}・{{$shop->areasub->area_name}}</a>
-        </li>
-        <li>></li>
-        <li><span>{{$shop->shop_name}}-{{$shop->areamain->area_name}}-</span></li>
-    </ul>
-</div>
-<div class="f-mainContents u-container">
+
+@extends('user.layouts.default',['data' => ['bread_crumbs' => $bread_crumbs, 'header_h1' => $header_h1]])
+
+@push('styles')
+    <link href="{{ asset('css/common.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/shoptop.css') }}" rel="stylesheet">
+    <link href="{{ asset('js/woocommerce-FlexSlider-53570ee/flexslider.css') }}" rel="stylesheet">
+@endpush
+
+@section('title', $shop->shop_name.'-'.$shop->areamain->area_name."-")
+
+@section('content')
     <h2>
         {{$shop->shop_name}}
     </h2>
     <div class="linkBtn">
         <button class="like u-hoverOpacity">LIKE</button>
-{{--        <a href="shopcomment/{{$shop->id}}" class="comment">分享文</a>--}}
+        {{--        <a href="shopcomment/{{$shop->id}}" class="comment">分享文</a>--}}
     </div>
     <p class="shopTitle">
         {{$shop->main_title}}
@@ -52,24 +38,24 @@
     <div class="shopContents">
         <h3><span class="photo">PHOTO GALLERY</span></h3>
         @if (count($photos) > 1)
-        <div class="flexslider photoSlider">
-            <ul class="slides">
-                @foreach($photos as $photo)
-                    <li><img src="{{ URL::asset('/img/shop/'.$photo) }}" alt=""></li>
-                @endforeach
-            </ul>
-            <div class="pagination"></div>
-            <a href="#" class="flex-prev button-prev">Prev</a>
-            <a href="#" class="flex-next button-next">Next</a>
-        </div>
+            <div class="flexslider photoSlider">
+                <ul class="slides">
+                    @foreach($photos as $photo)
+                        <li><img src="{{ URL::asset('/img/shop/'.$photo) }}" alt=""></li>
+                    @endforeach
+                </ul>
+                <div class="pagination"></div>
+                <a href="#" class="flex-prev button-prev">Prev</a>
+                <a href="#" class="flex-next button-next">Next</a>
+            </div>
         @else
-        <div class="photoSlider">
-            <ul class="">
-                @foreach($photos as $photo)
-                    <li><img src="{{ URL::asset('/img/shop/'.$photo) }}" alt=""></li>
-                @endforeach
-            </ul>
-        </div>
+            <div class="photoSlider">
+                <ul class="">
+                    @foreach($photos as $photo)
+                        <li><img src="{{ URL::asset('/img/shop/'.$photo) }}" alt=""></li>
+                    @endforeach
+                </ul>
+            </div>
         @endif
     </div>
     <div class="shopContents">
@@ -126,42 +112,11 @@
             </table>
         </div>
     </div>
-</div>
-<footer class="f-footer">
-    <div class="footerLogo">
-        <a href="">
-            <img src="{{ URL::asset('/img/logo.png') }}" alt="LOGO">
-        </a>
-    </div>
-</footer>
-<script type="text/javascript" charset="utf-8">
-    $(window).load(function () {
+@endsection
 
-        $('.flexslider').flexslider({
-            customDirectionNav: $(".flexslider a"),
-            controlsContainer: $(".flexslider .pagination"),
-        });
-
-
-        if (typeof Cookies.get('shop_{{$shop->id}}_liked') === 'undefined' || Cookies.get('shop_{{$shop->id}}_liked') === 0) {
-            //no cookie
-            $("button.like").removeClass('is-active');
-        } else {
-            $("button.like").addClass('is-active');
-        }
-
-        $("button.like").on("click", function () {
-            if (typeof Cookies.get('shop_{{$shop->id}}_liked') === 'undefined' || Cookies.get('shop_{{$shop->id}}_liked') === 0) {
-                //no cookies
-                Cookies.set('shop_{{$shop->id}}_liked', 1, {expires: 365});
-                $("button.like").addClass('is-active');
-            } else {
-                //have cookies
-                $("button.like").removeClass('is-active');
-                Cookies.remove('shop_{{$shop->id}}_liked');
-            }
-        });
-    });
-</script>
-</body>
-</html>
+@push('scripts')
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-migrate-3.0.min.js') }}"></script>
+    <script src="{{ asset('js/woocommerce-FlexSlider-53570ee/jquery.flexslider.js') }}"></script>
+    <script src="{{ asset('js/js.cookie.js') }}"></script>
+@endpush
