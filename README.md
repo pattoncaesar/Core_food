@@ -78,7 +78,7 @@ add to host
         - Service
         - ~~DI~~
         - Singleton
-        - 版面切割
+        ~~- 版面切割~~
    - ~~DEBUG: Url in Pagenation~~
    - SA
    - ShopRanking
