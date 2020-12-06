@@ -30,6 +30,7 @@ class CreateShopmainsTable extends Migration
             $table->text('holiday');
             $table->text('open_time');
             $table->text('shop_info');
+            $table->integer('ranking_score')->default('0');
             $table->timestamps();
 
             // 設定外來鍵

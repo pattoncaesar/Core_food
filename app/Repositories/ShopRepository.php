@@ -27,4 +27,18 @@ class ShopRepository extends Repository
 
         return $query->paginate($per_page_num);
     }
+
+    public function getRanking($main_area, $sub_area = null, $main_food = null, $s_food = null, $per_page_num = 20)
+    {
+        $query = ShopMain::where('main_area', '=', $main_area)->orderBy('ranking_score');
+
+        if ($sub_area) $query->whereIn('sub_area', $sub_area);
+        if ($main_food) $query->where('main_food', $main_food);
+        if ($s_food) {
+            $query->join('shop_foods', 'shop_mains.id', '=', 'shop_foods.shop_table_id')
+                ->whereIn('food_id', $s_food);
+        }
+
+        return $query->paginate($per_page_num);
+    }
 }
