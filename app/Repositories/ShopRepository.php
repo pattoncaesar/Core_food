@@ -30,7 +30,7 @@ class ShopRepository extends Repository
 
     public function getRanking($main_area, $sub_area = null, $main_food = null, $s_food = null, $per_page_num = 20)
     {
-        $query = ShopMain::where('main_area', '=', $main_area)->orderBy('ranking_score');
+        $query = ShopMain::where('main_area', '=', $main_area)->orderBy('ranking_score', 'desc');
 
         if ($sub_area) $query->whereIn('sub_area', $sub_area);
         if ($main_food) $query->where('main_food', $main_food);
